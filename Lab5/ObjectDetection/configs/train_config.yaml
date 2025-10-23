@@ -1,0 +1,31 @@
+# configs/train_config.yaml
+# Training configuration for EELAN Object Detector
+
+# Dataset
+data:
+  yaml_path: "E:/Pycharm/Advanced-Reading-on-Computer-Vision/Lab5/ObjectDetection/yolo_dataset/dataset.yaml"
+
+# Model
+model:
+  C_stem: 32
+  C_stage: 96
+  pretrained_backbone: "E:/Pycharm/Advanced-Reading-on-Computer-Vision/Lab5/ObjectDetection/runs/cls_eelan/best.pt"  # Path to classification checkpoint
+
+# Training parameters
+training:
+  epochs: 10
+  batch_size: 16
+  lr: 0.001
+  weight_decay: 0.0005
+  grad_clip: 10.0
+  img_size: 416
+  num_workers: 4
+  print_freq: 10
+
+# Loss function
+loss:
+  lambda_coord: 5.0
+  lambda_noobj: 0.5
+
+# Output
+output_dir: "E:/Pycharm/Advanced-Reading-on-Computer-Vision/Lab5/ObjectDetection/runs/detection_training"
