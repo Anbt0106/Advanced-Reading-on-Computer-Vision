@@ -44,9 +44,9 @@ CFG = {
 
     "epochs": 20,
     "batch_size": 32,
-    "lr": 2e-3,
-    "weight_decay": 0.05,
-    "label_smoothing": 0.0,
+    "lr": 1e-3,  # Reduced initial learning rate
+    "weight_decay": 0.1,  # Increased weight decay for regularization
+    "label_smoothing": 0.1,  # Added label smoothing
     "amp": True,  # CUDA-only
 
     "C_stem": 32,
@@ -55,7 +55,7 @@ CFG = {
     "g": 2,
 
     "use_cosine": True,
-    "min_lr_scale": 0.05,
+    "min_lr_scale": 0.1,  # Increased min learning rate to slow down decay
 
     "out_dir": "runs/cls_eelan",
     "best_ckpt": "best.pt",
@@ -70,8 +70,8 @@ CFG = {
     "save_optimizer_state": True,
     "preds_csv": "preds.csv",
 
-}
-
+    # Add dropout rate parameter
+    "dropout_rate": 0.3,  # Higher dropout rate for more regularization
 # -------------------------------
 # Utils
 # -------------------------------
@@ -247,7 +247,7 @@ def build_dataloaders(cfg):
         # ---- FIX: auto-split with independent datasets (avoid shared transform pitfall) ----
         base_train = datasets.ImageFolder(train_root)  # no transform
         n_total = len(base_train)
-        n_val = max(1, int(round(n_total * float(cfg["auto_split_val_ratio"]))))
+        base_train = datasets.ImageFolder(train_root, "no transform")
         n_train = n_total - n_val
         # reproducible split
         gen = torch.Generator().manual_seed(CFG["seed"])
